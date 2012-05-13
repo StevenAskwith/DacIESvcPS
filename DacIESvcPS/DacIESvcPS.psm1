@@ -351,33 +351,34 @@ Function get-DACImportRequestXML
 
 function get-DACDataCenter
 (
-	[Parameter(Mandatory=$true)][alias("s")][String]$Server
+       [Parameter(Mandatory=$true)][alias("s")][String]$Server
 )
 {
-	$dataCenters = @{
-	"CH1-1" = "ch1prod-dacsvc.azure.com";
-	"SN1-1" = "sn1prod-dacsvc.azure.com";
-	"DB3-1" = "db3prod-dacsvc.azure.com";
-	"AM2-1" = "am1prod-dacsvc.azure.com";
-	"HKN1-1" = "hkgprod-dacsvc.azure.com";
-	"SGP1-1" = "sg1prod-dacsvc.azure.com";
-	"DATA.INT.MSCDS.COM" = "dacdc.cloudapp.net"
-	}
-	
-	$Regex = "data\.([A-Za-z0-9\-]+)\.database\.windows\.net"
-	$Hostname = ([System.Net.DNS]::GetHostEntry($Server)).HostName
-	$Matches = [regex]::match($Hostname,$Regex)
-	$datacenter = $null
-	if ($Matches.success)
-	{
-		$datacenter = $dataCenters.Get_Item($Matches.Groups[1].value)
-	}
-	else
-	{
-		$datacenter = $dataCenters.Get_Item("DATA.INT.MSCDS.COM")
-	}
-	
-	return $datacenter
+   $dataCenters = @{
+   "CH" = "ch1prod-dacsvc.azure.com";
+   "SN" = "sn1prod-dacsvc.azure.com";
+   "DB" = "db3prod-dacsvc.azure.com";
+   "AM" = "am1prod-dacsvc.azure.com";
+   "HK" = "hkgprod-dacsvc.azure.com";
+   "SG" = "sg1prod-dacsvc.azure.com";
+   "DATA.INT.MSCDS.COM" = "dacdc.cloudapp.net"
+   }
+   
+   $Regex = "data\.([A-Za-z]{2})([A-Za-z0-9\-]+)\.database\.windows\.net"
+   $Hostname = ([System.Net.DNS]::GetHostEntry($Server)).HostName
+   $Matches = [regex]::match($Hostname,$Regex)
+   $datacenter = $null
+   if ($Matches.success)
+   {
+          $datacenter = $dataCenters.Get_Item($Matches.Groups[1].value)
+   }
+   else
+   {
+          $datacenter = $dataCenters.Get_Item("DATA.INT.MSCDS.COM")
+   }
+   
+   return $datacenter
 }
+
 
 Export-ModuleMember -function get-DacJobStatus, start-DacExport, start-DacImport
