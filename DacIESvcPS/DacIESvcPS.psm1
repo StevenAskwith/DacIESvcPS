@@ -74,7 +74,8 @@ function get-DacJobStatus
 	if($withInfo)
 	{
 		Write-Host $datacenter -ForegroundColor Magenta
-		$jobStatusXML.Save([Console]::Out)
+		#$jobStatusXML.Save([Console]::Out)
+		$jobStatusXML.ArrayOfStatusInfo.StatusInfo
 		Write-Host 
 	}
 	if(!$withInfo)
